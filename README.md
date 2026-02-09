@@ -23,7 +23,7 @@ Designed to demonstrate tenant isolation, role-based access control, and scalabl
 
 The backend API and frontend client run on separate ports.
 
-git clone <your_repo_url>
+git clone (https://github.com/jitheesh1995/saas-task-manager.git)
 
 ```bash(terminal):
 cd saas-task-manager
