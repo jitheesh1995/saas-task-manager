@@ -1,0 +1,12 @@
+{% load humanize %}
+{% if activities %}
+  {% for item in activities %}
+    <div class="activity-item activity-entry">
+      <div>
+        <strong>{{ item.actor_name }}</strong> {{ item.action }} "<strong>{{ item.target_title }}</strong>" &mdash; {{ item.created_at|naturaltime }}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="muted">No recent activity yet.</div>
+{% endif %}

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulseBoard | Multi-Tenant Project Manager</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo">PB</div>
+          <div>
+            <div class="brand-name">PulseBoard</div>
+            <div class="brand-sub">Multi-tenant workspace</div>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-link" data-view-target="dashboard">Dashboard</button>
+          <button class="nav-link" data-view-target="projects">Projects</button>
+          <button class="nav-link" data-view-target="tasks">Tasks</button>
+          <button class="nav-link" data-view-target="members">Members</button>
+        </nav>
+
+        <div class="sidebar-card">
+          <div class="label">Active organization</div>
+          <select id="orgSelect" class="input"></select>
+          <div class="role-badge" id="roleBadge">Member</div>
+        </div>
+
+        <div class="sidebar-footer">
+          <button class="btn btn-ghost" id="logoutBtn">Logout</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="page-title">
+            <h1 id="pageTitle">Dashboard</h1>
+            <p id="pageSubtitle">Stay focused across your teams and tenants.</p>
+          </div>
+          <div class="top-actions">
+            <button class="btn btn-secondary" data-view-target="projects">New project</button>
+            <button class="btn btn-primary" data-view-target="tasks">Add task</button>
+          </div>
+        </header>
+
+          <section class="content">
+            <div class="view" data-view="auth">
+              <div class="auth-hero">
+                <div class="brand auth-brand">
+                  <div class="logo">PB</div>
+                  <div>
+                    <div class="brand-name">PulseBoard</div>
+                    <div class="brand-sub">Multi-tenant workspace</div>
+                  </div>
+                </div>
+                <div class="auth-hero-copy">
+                  <p class="muted">Sign in or create an account to continue.</p>
+                </div>
+              </div>
+              <div class="auth-grid">
+                <div class="card auth-card">
+                  <div>
+                  <div class="eyebrow">Welcome back</div>
+                  <h2>Sign in to your workspace</h2>
+                  <p class="muted">Manage projects across all of your organizations.</p>
+                </div>
+                <form id="loginForm" autocomplete="off" class="form-grid">
+                  <label>
+                    Email
+                    <input type="email" name="email" autocomplete="off" required class="input" />
+                  </label>
+                  <label>
+                    Password
+                    <input type="password" name="password" autocomplete="off" required class="input" />
+                  </label>
+                  <button type="submit" class="btn btn-primary">Login</button>
+                  <div class="form-note" id="loginMsg"></div>
+                </form>
+              </div>
+
+              <div class="card auth-card">
+                <div>
+                  <div class="eyebrow">Get started</div>
+                  <h2>Create your account</h2>
+                  <p class="muted">Provision a new tenant and invite your team.</p>
+                </div>
+                <form id="registerForm" autocomplete="off" class="form-grid">
+                  <label>
+                    Email
+                    <input type="email" name="email" autocomplete="off" required class="input" />
+                  </label>
+                  <label>
+                    Password
+                    <input type="password" name="password" autocomplete="off" required class="input" />
+                  </label>
+                  <button type="submit" class="btn btn-primary">Register</button>
+                  <div class="form-note" id="registerMsg"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="view" data-view="dashboard">
+            <section class="stats-grid">
+              <div class="card stat-card">
+                <div class="stat-label">Organizations</div>
+                <div class="stat-value" id="statOrgs">0</div>
+                <div class="stat-meta">Active tenants</div>
+              </div>
+              <div class="card stat-card">
+                <div class="stat-label">Projects</div>
+                <div class="stat-value" id="statProjects">0</div>
+                <div class="stat-meta">In current org</div>
+              </div>
+              <div class="card stat-card">
+                <div class="stat-label">Tasks</div>
+                <div class="stat-value" id="statTasks">0</div>
+                <div class="stat-meta">Open items</div>
+              </div>
+              <div class="card stat-card">
+                <div class="stat-label">Memberships</div>
+                <div class="stat-value" id="statMemberships">0</div>
+                <div class="stat-meta">Your access</div>
+              </div>
+            </section>
+
+            <section class="dashboard-grid">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Organization overview</h3>
+                    <p class="muted">Switch between tenants or create a new workspace.</p>
+                  </div>
+                </div>
+                <div id="orgList" class="list"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Activity</h3>
+                    <p class="muted">Latest actions across your workspace.</p>
+                  </div>
+                </div>
+                <div id="activityList" class="activity-list"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Recent projects</h3>
+                    <p class="muted">Keep the most important initiatives visible.</p>
+                  </div>
+                  <button class="btn btn-secondary" data-view-target="projects">View all</button>
+                </div>
+                <div id="recentProjects" class="list"></div>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-header">
+                  <div>
+                    <h3>Quick actions</h3>
+                    <p class="muted">Jump straight into planning.</p>
+                  </div>
+                </div>
+                <div class="quick-actions">
+                  <button class="btn btn-secondary" data-view-target="projects">Create project</button>
+                  <button class="btn btn-secondary" data-view-target="tasks">Add task</button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="view" data-view="projects">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3>Projects</h3>
+                  <p class="muted">Organize initiatives by client, team, or goal.</p>
+                </div>
+              </div>
+              <form id="projectCreateForm" class="inline-form">
+                <input type="text" name="name" placeholder="Project name" required class="input" />
+                <input type="text" name="description" placeholder="Short description" class="input" />
+                <button type="submit" class="btn btn-primary">Create</button>
+              </form>
+              <div id="projectList" class="list"></div>
+            </div>
+          </div>
+
+          <div class="view" data-view="tasks">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3>Tasks</h3>
+                  <p class="muted">Track delivery with clear ownership.</p>
+                </div>
+              </div>
+              <form id="taskCreateForm" class="inline-form">
+                <input type="text" name="title" placeholder="Task title" required class="input" />
+                <select name="project" id="taskProjectSelect" class="input"></select>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </form>
+              <div id="taskGroups" class="task-groups"></div>
+            </div>
+          </div>
+
+          <div class="view" data-view="members">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3>Members</h3>
+                  <p class="muted">Manage access to this workspace.</p>
+                </div>
+                <button class="btn btn-primary" id="addMemberBtn">Add member</button>
+              </div>
+              <div class="table">
+                <div class="table-header">
+                  <div>Name</div>
+                  <div>Email</div>
+                  <div>Role</div>
+                  <div>Joined</div>
+                  <div></div>
+                </div>
+                <div id="membersTable" class="table-body"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal" id="addMemberModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <div class="modal-header">
+          <h3>Add member</h3>
+          <button class="btn btn-ghost" id="addMemberClose">Close</button>
+        </div>
+        <form id="addMemberForm" class="form-grid">
+          <label>
+            Email
+            <input type="email" name="email" required class="input" />
+          </label>
+          <label>
+            Role
+            <select name="role" class="input">
+              <option value="member">Member</option>
+              <option value="admin">Admin</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </label>
+          <div class="form-note" id="addMemberError"></div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="addMemberCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="addMemberSubmit">Invite</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="orgCreateModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <div class="modal-header">
+          <h3>Create organization</h3>
+          <button class="btn btn-ghost" id="orgCreateClose">Close</button>
+        </div>
+        <form id="orgCreateForm" class="form-grid">
+          <label>
+            Organization name
+            <input type="text" name="name" placeholder="e.g. Srishti Innovative" required class="input" />
+          </label>
+          <div class="form-note" id="orgCreateError"></div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="orgCreateCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="orgCreateSubmit">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal" id="modal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <div class="modal-header">
+          <h3 id="modalTitle">Modal title</h3>
+          <button class="btn btn-ghost" id="modalClose">Close</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+          <button class="btn btn-primary" id="modalConfirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
